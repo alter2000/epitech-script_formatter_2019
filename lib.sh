@@ -7,8 +7,6 @@ EOF
 
 export DEFAULT_HEADER
 
-source ./parse.sh
-
 help()
 {
     cat <<EOF
