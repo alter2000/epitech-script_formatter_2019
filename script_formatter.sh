@@ -4,7 +4,6 @@
 
 source ./lib.sh
 source ./parse.sh
-source ./lint.sh
 
 declare INDENT
 declare OUT
