@@ -2,15 +2,14 @@
 
 # entry point for formatter_2019
 
-source ./lib.sh
-source ./parse.sh
-
+declare SPACES
 declare INDENT
 declare OUT
 declare EXPAND
 declare HEADER
 
-INDENT="$(repeat ' ' 8)"
+SPACES=""
+INDENT=8
 OUT="/dev/stdout"
 EXPAND="false"
 HEADER="none"
@@ -38,30 +37,26 @@ main()
         case "$1" in
             -h|--header)
                 HEADER="$DEFAULT_HEADER"
-                echo hyer
                 shift
             ;;
 
             -s|--spaces)
-                echo lol
+                SPACES="true"
                 shift
             ;;
 
             -i|--indentation)
-                INDENT=$(repeat ' ' "$2")
-                echo lol "$INDENT"
+                INDENT="$2"
                 shift 2
             ;;
 
             -e|--expand)
                 EXPAND="true"
-                echo expandong "$EXPAND"
                 shift
             ;;
 
             -o|--output)
                 OUT="$2"
-                echo weebs "$OUT"
                 shift 2
             ;;
 
@@ -83,7 +78,30 @@ main()
         exit 84
     fi
 
-    parse "$(<"$file")"
+    # parse "$(<"$file")"
+    cp cmds.vim cmdready.vim
+    if [ "$HEADER" != "none" ]; then
+        sed -i "s/HEADER/$HEADER/" cmdready.vim
+    else
+        sed -i "s/qp.*$/\n/" cmdready.vim
+    fi
+    if [ -n "$SPACES" ]; then
+        sed -i 's/:set noexpandtab/:set expandtab/' cmdready.vim
+    fi
+    if [ "$EXPAND" = "true" ]; then
+        sed -Ei \
+            's/BERRY_COMBOLUTED_DO_NOT_CHANGE_DO_REGEX/\<do\>/' \
+            's/BERRY_COMBOLUTED_DO_NOT_CHANGE_THEN_REGEX/\<then\>/' \
+            's/EXPAND_BERRY_COMBOLUTED_DO_NOT_CHANGE_DO_REGEX/\ndo/' \
+            's/EXPAND_BERRY_COMBOLUTED_DO_NOT_CHANGE_THEN_REGEX/\nthen/' \
+            cmdready.vim
+    fi
+    if [ "$INDENT" != 8 ]; then
+        sed -i "s/8/$INDENT/g" cmdready.vim
+    fi
+    sed -i "s,FILE,$OUT," cmdready.vim
+    cat cmdready.vim >/dev/stderr
+    vim --clean -s cmdready.vim -E "$file" +'w /dev/stdout' 2>/dev/stderr 1>&2
 }
 
 main "$@"
