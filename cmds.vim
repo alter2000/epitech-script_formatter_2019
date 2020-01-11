@@ -1,9 +1,27 @@
-gg/# "qdapoHEADER"qp
-:set noexpandtab
-:set tabstop=8 shiftwidth=8
-gg=G
-:%s/BERRY_COMBOLUTED_DO_NOT_CHANGE_DO_REGEX/EXPAND_BERRY_COMBOLUTED_DO_NOT_CHANGE_DO_REGEX/g
-:%s/BERRY_COMBOLUTED_DO_NOT_CHANGE_THEN_REGEX/EXPAND_BERRY_COMBOLUTED_DO_NOT_CHANGE_THEN_REGEX/g
-gg=G
-VG:w! FILE
-:q!
+:if $HEADER != 'none'
+	:normal gg/# "qdapoHEADER"qp
+:endif
+
+:if $SPACES == "true"
+	:set noexpandtab
+:else
+	:set expandtab
+:endif
+
+:let indent = $INDENT
+:set tabstop=indent shiftwidth=indent
+
+:normal gg=G
+
+:if $EXPAND
+	:%s/\<do\>/\ndo/
+	:%s/\<then\>/\nthen/
+	:normal gg=G
+:endif
+
+:normal VG
+:let file = $OUT
+:if ! file
+	:file = '/dev/stdout'
+:endif
+:wq! file
