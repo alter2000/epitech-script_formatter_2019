@@ -1,23 +1,22 @@
-:if getline(1) !== '/bin/sh'
-	call insert(1, '/usr/bin/env bash')
+:if getline(1) !=# '#!/bin/sh'
+1d
+call append(0, '#!/usr/bin/env bash')
 endif
-:if $HEADER != 'none'
-	normal gg/# "qdapo# HEADER"qp
+:if $HEADER !=# 'none'
+call setline(3, "# some random header with a date: " . strftime('%c'))
 endif
-
-:if $SPACES == "true"
-	set expandtab
+:if $SPACES ==# "true"
+set expandtab
 else
-	set noexpandtab
+set noexpandtab
 endif
-
 :let g:indent = $INDENT
 :exec 'set tabstop=' . g:indent . ' shiftwidth=' . g:indent
-
-:if $EXPAND
-	%s/\<do\>/\ndo/
-	%s/\<then\>/\nthen/
-	normal gg=G
+:if $EXPAND ==# "true"
+execute '%substitute /\<then\>/\rthen/'
+execute '%substitute /\<do\>/\rdo/'
+execute '%substitute /;\s$//'
+execute '%substitute ///ge'
 endif
 
 :normal gg=G
@@ -25,7 +24,7 @@ endif
 
 :let g:file = $OUT
 :if g:file == ''
-	let g:file = '/dev/stdout'
+let g:file = '/dev/stdout'
 endif
-:exec 'wq!' . g:file
-:q!
+exec 'wq!' . g:file
+q!
