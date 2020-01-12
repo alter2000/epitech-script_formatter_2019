@@ -3,9 +3,9 @@
 endif
 
 :if $SPACES == "true"
-	set noexpandtab
-else
 	set expandtab
+else
+	set noexpandtab
 endif
 
 :let g:indent = $INDENT
