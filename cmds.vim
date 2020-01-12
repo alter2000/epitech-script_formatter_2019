@@ -18,6 +18,7 @@ endif
 endif
 
 :normal gg=G
+:retab
 
 :let g:file = $OUT
 :if g:file == ''
