@@ -1,3 +1,6 @@
+:if getline(1) !== '/bin/sh'
+	call insert(1, '/usr/bin/env bash')
+endif
 :if $HEADER != 'none'
 	normal gg/# "qdapo# HEADER"qp
 endif
