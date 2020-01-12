@@ -3,7 +3,7 @@
 call append(0, '#!/usr/bin/env bash')
 endif
 :if $HEADER !=# 'none'
-call setline(3, "# some random header with a date: " . strftime('%c'))
+call append(3, "# some random header with a date: " . strftime('%c'))
 endif
 :if $SPACES ==# "true"
 set expandtab
