@@ -83,7 +83,7 @@ main()
 	export EXPAND
 	export HEADER
 
-	vim --clean -s ./cmds.vim -E "$file"
+	vim --clean -s ./cmds.vim -E "$file" </dev/null || true
 }
 
 main "$@"
